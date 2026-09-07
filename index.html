@@ -1,0 +1,527 @@
+HTML
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2026 東京家庭溫馨之旅</title>
+    <style>
+        :root {
+            --primary: #FF5A5F;
+            --secondary: #00A699;
+            --dark: #222222;
+            --light: #F7F7F7;
+            --white: #FFFFFF;
+            --gray: #717171;
+            --border: #DDDDDD;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            padding-bottom: 90px;
+        }
+        header {
+            background: linear-gradient(135deg, #FF5A5F, #FF385C);
+            color: var(--white);
+            padding: 24px 16px 16px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        header p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        .container {
+            padding: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        /* Day Selector Chips */
+        .day-chips {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+            scrollbar-width: none;
+        }
+        .day-chips::-webkit-scrollbar {
+            display: none;
+        }
+        .chip {
+            background: var(--white);
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            color: var(--gray);
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            transition: all 0.2s;
+        }
+        .chip.active {
+            background: var(--dark);
+            color: var(--white);
+            border-color: var(--dark);
+        }
+        /* Cards & Timeline */
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+        h2.section-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--dark);
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 8px;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 18px;
+            margin-bottom: 16px;
+            border-left: 2px solid var(--primary);
+        }
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+        .time {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 2px;
+            text-transform: uppercase;
+        }
+        .title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 3px;
+        }
+        .desc {
+            font-size: 12px;
+            color: var(--gray);
+            line-height: 1.4;
+        }
+        .map-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+            background: #F0F9F8;
+            color: var(--secondary);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        /* Bottom Nav */
+        nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--white);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 20%;
+        }
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            margin-bottom: 3px;
+            fill: currentColor;
+        }
+        .nav-item.active {
+            color: var(--primary);
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .badge {
+            background: #FFE8E8;
+            color: var(--primary);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>2026 東京家庭溫馨之旅</h1>
+    <p>11/07 (六) - 11/13 (五) ｜ 5位同行 ｜ 澀谷 Indigo 酒店</p>
+</header>
+
+<div class="container">
+
+    <!-- Tab 1: 每日行程 -->
+    <div id="tab-itinerary" class="tab-content active">
+        <div class="day-chips">
+            <button class="chip active" onclick="switchDay(1, this)">Day 1 (11/7)</button>
+            <button class="chip" onclick="switchDay(2, this)">Day 2 (11/8)</button>
+            <button class="chip" onclick="switchDay(3, this)">Day 3 (11/9)</button>
+            <button class="chip" onclick="switchDay(4, this)">Day 4 (11/10)</button>
+            <button class="chip" onclick="switchDay(5, this)">Day 5 (11/11)</button>
+            <button class="chip" onclick="switchDay(6, this)">Day 6 (11/12)</button>
+            <button class="chip" onclick="switchDay(7, this)">Day 7 (11/13)</button>
+        </div>
+
+        <!-- Day 1 -->
+        <div id="day-1" class="day-panel">
+            <div class="card">
+                <h2 class="section-title">Day 1：抵達東京・澀谷初見</h2>
+                <div class="timeline-item">
+                    <div class="time">10:20 - 15:25</div>
+                    <div class="title">搭乘 JAL736 航班</div>
+                    <div class="desc">由香港國際機場 T1 飛往成田國際機場 T2。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">16:30 - 18:00</div>
+                    <div class="title">N'EX 成田特快直達澀谷</div>
+                    <div class="desc">於機場 B1F 購買／領取 N'EX 車票前往澀谷。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">18:15 - 19:00</div>
+                    <div class="title">酒店 Check-in</div>
+                    <div class="desc">入住 Hotel Indigo Tokyo Shibuya 放行李。</div>
+                    <a href="https://maps.google.com/?q=Hotel+Indigo+Tokyo+Shibuya" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">19:00 - 21:00</div>
+                    <div class="title">Pokémon Center SHIBUYA & 晚餐</div>
+                    <div class="desc">位於澀谷 PARCO 6F，晚餐可選擇附近的「新時代 澀谷3號店」食招牌皮串。</div>
+                    <a href="https://maps.google.com/?q=Pokemon+Center+SHIBUYA" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 2 -->
+        <div id="day-2" class="day-panel" style="display:none;">
+            <div class="card">
+                <h2 class="section-title">Day 2：世田谷線・下北澤文青・代官山</h2>
+                <div class="timeline-item">
+                    <div class="time">09:00 - 10:30</div>
+                    <div class="title">PATH 晨光早午餐</div>
+                    <div class="desc">富谷超人氣現烤荷蘭鬆餅與早午餐（建議提早排隊）。</div>
+                    <a href="https://maps.google.com/?q=PATH+Tomigaya" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">10:30 - 12:30</div>
+                    <div class="title">東急世田谷線懷舊遊</div>
+                    <div class="desc">體驗東京僅存的路面電車路線。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">12:30 - 17:00</div>
+                    <div class="title">下北澤古著與雜貨散策</div>
+                    <div class="desc">充滿文青氣息的街道與特色小店。</div>
+                    <a href="https://maps.google.com/?q=Shimokitazawa" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">17:00 - 18:30</div>
+                    <div class="title">DOLCE TACUBO 甜點時間</div>
+                    <div class="desc">代官山極致酥脆可麗露與焦糖布丁。</div>
+                    <a href="https://maps.google.com/?q=DOLCE+TACUBO" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 3 -->
+        <div id="day-3" class="day-panel" style="display:none;">
+            <div class="card">
+                <h2 class="section-title">Day 3：小網神社・淺草・銀河鐵路觀光船・台場</h2>
+                <div class="timeline-item">
+                    <div class="time">09:30 - 10:30</div>
+                    <div class="title">小網神社祈福</div>
+                    <div class="desc">東京最強錢洗辯財天，求財靈驗。</div>
+                    <a href="https://maps.google.com/?q=Koami+Jinja" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">11:00 - 12:30</div>
+                    <div class="title">五代目 花山うどん日本橋店</div>
+                    <div class="desc">人氣寬烏冬午餐。</div>
+                    <a href="https://maps.google.com/?q=Hanakawa+Udon+Nihonbashi" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">13:00 - 14:30</div>
+                    <div class="title">淺草寺與 Hat Coffee 3D 拉花</div>
+                    <div class="desc">參拜雷門後前往 Hat Coffee 嘆特制立體動漫拉花咖啡。</div>
+                    <a href="https://maps.google.com/?q=Hat+Coffee+Asakusa" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">15:00 - 16:00</div>
+                    <div class="title">銀河鐵路 999 觀光船</div>
+                    <div class="desc">由淺草乘搭未來型觀光船前往台場。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">16:00 - 20:00</div>
+                    <div class="title">台場章魚丸博物館 & 夜景</div>
+                    <div class="desc">於 DECKS Tokyo Beach 4F 品嚐大粒章魚燒與欣賞彩虹橋夜景。</div>
+                    <a href="https://maps.google.com/?q=Odaiba+Takoyaki+Museum" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 4 -->
+        <div id="day-4" class="day-panel" style="display:none;">
+            <div class="card">
+                <h2 class="section-title">Day 4：富士山自駕全日遊</h2>
+                <div class="timeline-item">
+                    <div class="time">07:00 - 09:00</div>
+                    <div class="title">澀谷出發・前往富士五湖</div>
+                    <div class="desc">取車後沿中央自動車道出發。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">09:00 - 10:30</div>
+                    <div class="title">忍野八海</div>
+                    <div class="desc">清澈湧泉與富士山完美對映。</div>
+                    <a href="https://maps.google.com/?q=Oshino+Hakkai" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">10:45 - 12:15</div>
+                    <div class="title">大石公園</div>
+                    <div class="desc">河口湖畔賞景散步。</div>
+                    <a href="https://maps.google.com/?q=Oishi+Park" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">13:00 - 16:00</div>
+                    <div class="title">富士急樂園</div>
+                    <div class="desc">午後通行證入場遊玩。</div>
+                    <a href="https://maps.google.com/?q=Fuji-Q+Highland" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">16:30 - 19:00</div>
+                    <div class="title">御殿場 Premium Outlets</div>
+                    <div class="desc">血拼購物與欣賞富士山夕陽。</div>
+                    <a href="https://maps.google.com/?q=Gotemba+Premium+Outlets" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 5 -->
+        <div id="day-5" class="day-panel" style="display:none;">
+            <div class="card">
+                <h2 class="section-title">Day 5：銀座・池袋 Chiikawa Park・上野</h2>
+                <div class="timeline-item">
+                    <div class="time">11:30 - 13:30</div>
+                    <div class="title">銀座八芳精緻午市</div>
+                    <div class="desc">享受高質日式料理。</div>
+                    <a href="https://maps.google.com/?q=Ginza+Happo" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">14:00 - 17:00</div>
+                    <div class="title">池袋 Sunshine City (Chiikawa Park)</div>
+                    <div class="desc">朝聖人氣 Chiikawa 主題樂園（需提前預約）。</div>
+                    <a href="https://maps.google.com/?q=Sunshine+City+Ikebukuro" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">17:30 - 20:00</div>
+                    <div class="title">上野阿美橫町</div>
+                    <div class="desc">藥妝、零食大採購。</div>
+                    <a href="https://maps.google.com/?q=Ameyoko" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 6 -->
+        <div id="day-6" class="day-panel" style="display:none;">
+            <div class="card">
+                <h2 class="section-title">Day 6：木更津 Outlet・東京站・東京鐵塔</h2>
+                <div class="timeline-item">
+                    <div class="time">09:30 - 15:00</div>
+                    <div class="title">木更津 Mitsui Outlet Park</div>
+                    <div class="desc">由東京站乘高速巴士直達，大型 Outlet 瘋狂血拼。</div>
+                    <a href="https://maps.google.com/?q=Mitsui+Outlet+Park+Kisarazu" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">15:30 - 17:30</div>
+                    <div class="title">東京站一番街</div>
+                    <div class="desc">動漫角色街與手信街。</div>
+                    <a href="https://maps.google.com/?q=Tokyo+Station+Ichibangai" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">18:00 - 20:00</div>
+                    <div class="title">東京鐵塔夜景</div>
+                    <div class="desc">登上 Main Deck 欣賞浪漫東京夜景。</div>
+                    <a href="https://maps.google.com/?q=Tokyo+Tower" target="_blank" class="map-btn">📍 Google 導航</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 7 -->
+        <div id="day-7" class="day-panel" style="display:none;">
+            <div class="card">
+                <h2 class="section-title">Day 7：澀谷最後衝刺・返程香港</h2>
+                <div class="timeline-item">
+                    <div class="time">09:00 - 14:00</div>
+                    <div class="title">澀谷最後購物・Alpen TOKYO 補貨</div>
+                    <div class="desc">酒店退房，行李寄放，前往新宿 Alpen TOKYO 或澀谷 Mega Donki 最後衝刺。</div>
+                    <a href="https://maps.google.com/?q=Alpen+TOKYO" target="_blank" class="map-btn">📍 Google 導航 (Alpen)</a>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">15:00 - 18:30</div>
+                    <div class="title">前往成田機場 T2</div>
+                    <div class="desc">乘搭 N'EX 前往機場辦理登機。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time">18:30 - 22:55</div>
+                    <div class="title">搭乘 JAL735 航班返港</div>
+                    <div class="desc">平安返抵香港國際機場 T1。</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 2: 交通 -->
+    <div id="tab-transport" class="tab-content">
+        <div class="card">
+            <h2 class="section-title">主要交通工具</h2>
+            <div class="timeline-item">
+                <div class="title">成田機場 ⇄ 澀谷 (N'EX)</div>
+                <div class="desc">JR Narita Express 直達，車程約 80 分鐘，成人單程約 ¥3,330。</div>
+            </div>
+            <div class="timeline-item">
+                <div class="title">市內交通 (Suica / Pasmo)</div>
+                <div class="desc">建議直接將 Suica 或 Pasmo 加入手機 Apple Wallet，搭乘地鐵及 JR 極之方便。</div>
+            </div>
+            <div class="timeline-item">
+                <div class="title">淺草 ➔ 台場 (銀河鐵路 999 觀光船)</div>
+                <div class="desc">未來型觀光船 (HIMIKO / HOTALUNA)，航程約 50 分鐘，需提前官網預約。</div>
+            </div>
+            <div class="timeline-item">
+                <div class="title">富士山自駕遊</div>
+                <div class="desc">租車一日遊，請確認配備 ETC 卡、雪胎及兒童座椅。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 3: 住宿 -->
+    <div id="tab-hotel" class="tab-content">
+        <div class="card">
+            <h2 class="section-title">全程入住酒店</h2>
+            <div style="font-size: 14px; font-weight: 700; margin-bottom: 6px;">Hotel Indigo Tokyo Shibuya by IHG</div>
+            <div class="desc" style="margin-bottom: 10px;">2 Chome 25-12, Dogenzaka, Shibuya-Ku, Tokyo 150-0043</div>
+            <div class="desc" style="margin-bottom: 12px;">電話：+81 3-6712-7470</div>
+            <a href="https://maps.google.com/?q=Hotel+Indigo+Tokyo+Shibuya" target="_blank" class="map-btn">📍 開啟酒店地圖導航</a>
+        </div>
+    </div>
+
+    <!-- Tab 4: 行李 -->
+    <div id="tab-baggage" class="tab-content">
+        <div class="card">
+            <h2 class="section-title">行前準備與行李清單</h2>
+            <div class="info-row"><span>護照 (有效期6個月以上)</span><span class="badge">必備</span></div>
+            <div class="info-row"><span>日本 eSIM / 網卡</span><span class="badge">已購</span></div>
+            <div class="info-row"><span>Suica / Pasmo 數位交通卡</span><span class="badge">入手機</span></div>
+            <div class="info-row"><span>輕便保暖外套 (11月早晚約 8-15度)</span><span class="badge">衣物</span></div>
+            <div class="info-row"><span>香港駕照 + 國際駕照 (自駕用)</span><span class="badge">Day 4</span></div>
+            <div class="info-row"><span>個人常備藥品 / 充電器 / 行動電源</span><span class="badge">隨身</span></div>
+        </div>
+    </div>
+
+    <!-- Tab 5: 預算 -->
+    <div id="tab-budget" class="tab-content">
+        <div class="card">
+            <h2 class="section-title">預算與航班概要</h2>
+            <div class="info-row"><span>同行人數</span><strong>5 人 (2男3女)</strong></div>
+            <div class="info-row"><span>去程航班</span><strong>JL736 10:20 HKG ➔ 15:25 NRT</strong></div>
+            <div class="info-row"><span>回程航班</span><strong>JL735 18:30 NRT ➔ 22:55 HKG</strong></div>
+            <div class="info-row"><span>貨幣建議</span><strong>日圓 (JPY) 现金 + 信用卡</strong></div>
+        </div>
+    </div>
+
+</div>
+
+<!-- 底部導航列 -->
+<nav>
+    <button class="nav-item active" onclick="switchTab('itinerary', this)">
+        <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+        行程
+    </button>
+    <button class="nav-item" onclick="switchTab('transport', this)">
+        <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.76l.12.34V17z"/></svg>
+        交通
+    </button>
+    <button class="nav-item" onclick="switchTab('hotel', this)">
+        <svg viewBox="0 0 24 24"><path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/></svg>
+        住宿
+    </button>
+    <button class="nav-item" onclick="switchTab('baggage', this)">
+        <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM10 4h4v2h-4V4zm10 15H4V8h16v11z"/></svg>
+        行李
+    </button>
+    <button class="nav-item" onclick="switchTab('budget', this)">
+        <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+        預算
+    </button>
+</nav>
+
+<script>
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.getElementById('tab-' + tabId).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    function switchDay(dayNum, btn) {
+        document.querySelectorAll('.day-panel').forEach(el => el.style.display = 'none');
+        document.getElementById('day-' + dayNum).style.display = 'block';
+        document.querySelectorAll('.day-chips .chip').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
+    }
+</script>
+
+</body>
+</html>
